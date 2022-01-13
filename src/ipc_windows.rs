@@ -1,13 +1,12 @@
-use crate::discord_ipc::DiscordIpc;
+use crate::{discord_ipc::DiscordIpc, error::Error};
 use serde_json::json;
 use std::{
-    error::Error,
     io::{Read, Write},
     path::PathBuf,
 };
 use windows_named_pipe::PipeStream;
 
-type Result<T> = std::result::Result<T, Box<dyn Error>>;
+type Result<T> = std::result::Result<T, crate::error::Error>;
 
 #[allow(dead_code)]
 pub struct DiscordIpcClient {
@@ -30,7 +29,9 @@ impl DiscordIpc for DiscordIpcClient {
             }
         }
 
-        Err("Couldn't connect to the Discord IPC socket".into())
+        Err(Error::ConnectionFailure(
+            "Couldn't connect to the Discord IPC socket".into(),
+        ))
     }
 
     fn write(&mut self, data: &[u8]) -> Result<()> {
