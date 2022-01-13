@@ -8,8 +8,9 @@ A simple, cross-platform crate to connect and send data to Discord's IPC. Specia
 ## Example
 ```rust
 use discord_rich_presence::{activity, new_client, DiscordIpc};
+use crate::error::Error;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Error> {
     let mut client = new_client("<some application ID>")?;
 
     client.connect()?;
