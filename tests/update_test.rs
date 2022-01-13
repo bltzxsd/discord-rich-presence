@@ -2,7 +2,7 @@ use discord_rich_presence::{activity, new_client, DiscordIpc};
 use std::error::Error;
 
 #[test]
-fn test_updating() -> Result<(), Box<dyn Error>> {
+fn test_updating() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     let mut client = new_client("771124766517755954")?;
     client.connect()?;
 
