@@ -1,8 +1,9 @@
 use std::convert::TryInto;
-use std::error::Error;
+
+use crate::error::Error;
 
 // Re-implement some packing methods in Rust
-pub fn pack(opcode: u32, data_len: u32) -> Result<Vec<u8>, Box<dyn Error>> {
+pub fn pack(opcode: u32, data_len: u32) -> Result<Vec<u8>, Error> {
     let mut bytes = Vec::new();
 
     for byte_array in &[opcode.to_le_bytes(), data_len.to_le_bytes()] {
@@ -12,7 +13,7 @@ pub fn pack(opcode: u32, data_len: u32) -> Result<Vec<u8>, Box<dyn Error>> {
     Ok(bytes)
 }
 
-pub fn unpack(data: Vec<u8>) -> Result<(u32, u32), Box<dyn Error>> {
+pub fn unpack(data: Vec<u8>) -> Result<(u32, u32), Error> {
     let data = data.as_slice();
     let (opcode, header) = data.split_at(std::mem::size_of::<u32>());
 
