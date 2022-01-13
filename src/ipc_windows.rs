@@ -9,6 +9,7 @@ use windows_named_pipe::PipeStream;
 type Result<T> = std::result::Result<T, crate::error::Error>;
 
 #[allow(dead_code)]
+#[derive(Debug)]
 pub struct DiscordIpcClient {
     pub client_id: String,
     pub connected: bool,

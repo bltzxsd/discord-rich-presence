@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 use crate::{
     activity::Activity,
     error::Error,
@@ -9,7 +11,7 @@ use uuid::Uuid;
 type Result<T> = std::result::Result<T, Error>;
 
 /// A client that connects to and communicates with the Discord IPC.
-pub trait DiscordIpc {
+pub trait DiscordIpc: Debug {
     /// Connects the client to the Discord IPC.
     ///
     /// This method attempts to first establish a connection,
