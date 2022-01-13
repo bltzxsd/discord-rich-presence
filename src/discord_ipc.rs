@@ -1,30 +1,35 @@
 use crate::{
     activity::Activity,
+    error::Error,
     pack_unpack::{pack, unpack},
 };
 use serde_json::{json, Value};
-use std::error::Error;
 use uuid::Uuid;
 
-type Result<T> = std::result::Result<T, Box<dyn Error>>;
+type Result<T> = std::result::Result<T, Error>;
 
 /// A client that connects to and communicates with the Discord IPC.
 pub trait DiscordIpc {
     /// Connects the client to the Discord IPC.
-    /// 
+    ///
     /// This method attempts to first establish a connection,
     /// and then sends a handshake.
-    /// 
+    ///
     /// # Errors
-    /// 
+    ///
     /// Returns an `Err` variant if the client
     /// failed to connect to the socket, or if it failed to
     /// send a handshake.
-    /// 
+    ///
     /// # Examples
-    /// ```
+    /// ```ignore
+    /// # use std::error::Error;
+    /// # fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
+    /// # use crate::discord_rich_presence::DiscordIpc;
     /// let mut client = discord_rich_presence::new_client("<some client id>")?;
     /// client.connect()?;
+    /// # Ok(())
+    /// # }
     /// ```
     fn connect(&mut self) -> Result<()> {
         self.connect_ipc()?;
@@ -37,20 +42,22 @@ pub trait DiscordIpc {
     ///
     /// This method closes the client's active connection,
     /// then re-connects it and re-sends a handshake.
-    /// 
+    ///
     /// # Errors
-    /// 
+    ///
     /// Returns an `Err` variant if the client
     /// failed to connect to the socket, or if it failed to
     /// send a handshake.
-    /// 
+    ///
     /// # Examples
-    /// ```
+    /// ```ignore
+    /// # use crate::discord_rich_presence::DiscordIpc;
     /// let mut client = discord_rich_presence::new_client("<some client id>")?;
     /// client.connect()?;
-    /// 
+    ///
     /// client.close()?;
     /// client.reconnect()?;
+    /// # Ok::<(), Box<dyn std::error::Error + Send + Sync + 'static>>(())
     /// ```
     fn reconnect(&mut self) -> Result<()> {
         self.close()?;
@@ -67,16 +74,16 @@ pub trait DiscordIpc {
     fn connect_ipc(&mut self) -> Result<()>;
 
     /// Handshakes the Discord IPC.
-    /// 
+    ///
     /// This method sends the handshake signal to the IPC.
     /// It is usually not called manually, as it is automatically
     /// called by [`connect`] and/or [`reconnect`].
-    /// 
+    ///
     /// [`connect`]: #method.connect
     /// [`reconnect`]: #method.reconnect
-    /// 
+    ///
     /// # Errors
-    /// 
+    ///
     /// Returns an `Err` variant if sending the handshake failed.
     fn send_handshake(&mut self) -> Result<()> {
         self.send(
@@ -93,17 +100,21 @@ pub trait DiscordIpc {
     }
 
     /// Sends JSON data to the Discord IPC.
-    /// 
+    ///
     /// This method takes data (`serde_json::Value`) and
     /// an opcode as its parameters.
-    /// 
+    ///
     /// # Errors
     /// Returns an `Err` variant if writing to the socket failed
-    /// 
+    ///
     /// # Examples
-    /// ```
+    /// ```ignore
+    /// # use discord_rich_presence::DiscordIpc;
+    /// # use discord_rich_presence::new_client;
+    /// # let mut client = new_client("ID")?;
     /// let payload = serde_json::json!({ "field": "value" });
     /// client.send(payload, 0)?;
+    /// # Ok::<(), Box<dyn std::error::Error + Send + Sync + 'static>>(())
     /// ```
     fn send(&mut self, data: Value, opcode: u8) -> Result<()> {
         let data_string = data.to_string();
@@ -119,20 +130,24 @@ pub trait DiscordIpc {
     fn write(&mut self, data: &[u8]) -> Result<()>;
 
     /// Receives an opcode and JSON data from the Discord IPC.
-    /// 
+    ///
     /// This method returns any data received from the IPC.
     /// It returns a tuple containing the opcode, and the JSON data.
-    /// 
+    ///
     /// # Errors
     /// Returns an `Err` variant if reading the socket was
     /// unsuccessful.
-    /// 
+    ///
     /// # Examples
-    /// ```
+    /// ```ignore
+    /// # use discord_rich_presence::new_client;
+    /// # use crate::discord_rich_presence::DiscordIpc;
+    /// # let mut client = new_client("ID")?;
     /// client.connect_ipc()?;
     /// client.send_handshake()?;
-    /// 
+    ///
     /// println!("{:?}", client.recv()?);
+    /// # Ok::<(), Box<dyn std::error::Error + Send + Sync + 'static>>(())
     /// ```
     fn recv(&mut self) -> Result<(u32, Value)> {
         let mut header = [0; 8];
@@ -153,13 +168,13 @@ pub trait DiscordIpc {
     fn read(&mut self, buffer: &mut [u8]) -> Result<()>;
 
     /// Sets a Discord activity.
-    /// 
+    ///
     /// This method is an abstraction of [`send`],
     /// wrapping it such that only an activity payload
     /// is required.
-    /// 
+    ///
     /// [`send`]: #method.send
-    /// 
+    ///
     /// # Errors
     /// Returns an `Err` variant if sending the payload failed.
     fn set_activity(&mut self, activity_payload: Activity) -> Result<()> {

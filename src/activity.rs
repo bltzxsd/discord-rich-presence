@@ -162,6 +162,12 @@ impl<'a> Activity<'a> {
     }
 }
 
+impl<'a> Default for Activity<'a> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Timestamps {
     /// Creates a new `Timestamps`
     pub fn new() -> Self {
@@ -181,6 +187,12 @@ impl Timestamps {
     pub fn end(mut self, end: i64) -> Self {
         self.end = Some(end);
         self
+    }
+}
+
+impl Default for Timestamps {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -205,11 +217,18 @@ impl<'a> Party<'a> {
     /// ```
     /// // Creates a party with a current size
     /// // of 1, and a max size of 3
-    /// let party = Party::new().size([1, 3])
+    /// # use discord_rich_presence::activity::Party;
+    /// let party = Party::new().size([1, 3]);
     /// ```
     pub fn size(mut self, size: [i32; 2]) -> Self {
         self.size = Some(size);
         self
+    }
+}
+
+impl<'a> Default for Party<'a> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -253,6 +272,12 @@ impl<'a> Assets<'a> {
     }
 }
 
+impl<'a> Default for Assets<'a> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<'a> Secrets<'a> {
     /// Creates a new `Secrets`
     pub fn new() -> Self {
@@ -279,6 +304,12 @@ impl<'a> Secrets<'a> {
     pub fn r#match(mut self, r#match: &'a str) -> Self {
         self.r#match = Some(r#match);
         self
+    }
+}
+
+impl<'a> Default for Secrets<'a> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
