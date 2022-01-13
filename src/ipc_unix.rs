@@ -1,4 +1,4 @@
-use crate::discord_ipc::DiscordIpc;
+pub(crate) use crate::discord_ipc::DiscordIpc;
 use serde_json::json;
 use std::os::unix::net::UnixStream;
 use std::{
@@ -12,7 +12,7 @@ use std::{
 // Environment keys to search for the Discord pipe
 const ENV_KEYS: [&str; 4] = ["XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"];
 
-type Result<T> = std::result::Result<T, Box<dyn Error>>;
+type Result<T> = std::result::Result<T, crate::error::Error>;
 
 #[allow(dead_code)]
 pub struct DiscordIpcClient {
