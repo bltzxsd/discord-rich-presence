@@ -24,7 +24,7 @@ pub trait DiscordIpc: Debug {
     /// send a handshake.
     ///
     /// # Examples
-    /// ```ignore
+    /// ```no_run
     /// # use std::error::Error;
     /// # fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     /// # use crate::discord_rich_presence::DiscordIpc;
@@ -52,7 +52,7 @@ pub trait DiscordIpc: Debug {
     /// send a handshake.
     ///
     /// # Examples
-    /// ```ignore
+    /// ```no_run
     /// # use crate::discord_rich_presence::DiscordIpc;
     /// let mut client = discord_rich_presence::new_client("<some client id>")?;
     /// client.connect()?;
@@ -110,7 +110,7 @@ pub trait DiscordIpc: Debug {
     /// Returns an `Err` variant if writing to the socket failed
     ///
     /// # Examples
-    /// ```ignore
+    /// ```no_run
     /// # use discord_rich_presence::DiscordIpc;
     /// # use discord_rich_presence::new_client;
     /// # let mut client = new_client("ID")?;
@@ -141,7 +141,7 @@ pub trait DiscordIpc: Debug {
     /// unsuccessful.
     ///
     /// # Examples
-    /// ```ignore
+    /// ```no_run
     /// # use discord_rich_presence::new_client;
     /// # use crate::discord_rich_presence::DiscordIpc;
     /// # let mut client = new_client("ID")?;
