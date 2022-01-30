@@ -1,13 +1,14 @@
 pub(crate) use crate::discord_ipc::DiscordIpc;
+use crate::error::Error;
 use serde_json::json;
 use std::os::unix::net::UnixStream;
 use std::{
     env::var,
-    error::Error,
     io::{Read, Write},
     net::Shutdown,
     path::PathBuf,
 };
+
 
 // Environment keys to search for the Discord pipe
 const ENV_KEYS: [&str; 4] = ["XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"];
