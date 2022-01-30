@@ -9,7 +9,6 @@ use std::{
     path::PathBuf,
 };
 
-
 // Environment keys to search for the Discord pipe
 const ENV_KEYS: [&str; 4] = ["XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"];
 
@@ -36,7 +35,9 @@ impl DiscordIpc for DiscordIpcClient {
             }
         }
 
-        Err(Error::ConnectionFailure("could not connect to the Discord IPC socket").into())
+        Err(Error::ConnectionFailure(
+            "could not connect to the Discord IPC socket".into(),
+        ))
     }
 
     fn write(&mut self, data: &[u8]) -> Result<()> {
