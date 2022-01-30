@@ -14,7 +14,7 @@ const ENV_KEYS: [&str; 4] = ["XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"];
 
 type Result<T> = std::result::Result<T, crate::error::Error>;
 
-#[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct DiscordIpcClient {
     pub client_id: String,
     pub connected: bool,
@@ -35,7 +35,7 @@ impl DiscordIpc for DiscordIpcClient {
             }
         }
 
-        Err("Couldn't connect to the Discord IPC socket".into())
+        Err(ErrorKind::ConnectionFailure("Couldn't connect to the Discord IPC socket").into())
     }
 
     fn write(&mut self, data: &[u8]) -> Result<()> {
